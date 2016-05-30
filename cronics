@@ -1,8 +1,13 @@
 #!/bin/bash
 
-# Cronic v3 - cron job report wrapper
-# Copyright 2007-2016 Chuck Houpt. No rights reserved, whatsoever.
-# Public Domain CC0: http://creativecommons.org/publicdomain/zero/1.0/
+# CronicS -- extended cron job wrapper
+# (with _s_earch capability, hence the s)
+# Canonical download source: https://github.com/n-st/cronics/
+# Based on the tremendously useful original by Chuck Houpt:
+#  Cronic v3 - cron job report wrapper
+#  Copyright 2007-2016 Chuck Houpt. No rights reserved, whatsoever.
+#  Public Domain CC0: http://creativecommons.org/publicdomain/zero/1.0/
+# Canonical download source for the original: https://habilis.net/cronic/
 
 set -eu
 
