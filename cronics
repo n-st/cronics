@@ -11,6 +11,36 @@ OUT=$TMP/cronic.out
 ERR=$TMP/cronic.err
 TRACE=$TMP/cronic.trace
 
+# additional error/non-error conditions:
+#   error when X in stdout:                     cronic +X
+#   error when X not in stdout or stderr:       cronic +!X
+#   no error when X in stdout or stderr:        cronic -X
+E_WHEN_PRESENT=""
+E_WHEN_NOT_PRESENT=""
+NE_WHEN_PRESENT=""
+while [ "$1" != "--" ]
+do
+    case "$1" in
+        +!*)
+            E_WHEN_NOT_PRESENT="${1:2}"
+            ;;
+        +*)
+            E_WHEN_PRESENT="${1:1}"
+            ;;
+        -!*)
+            # Forward compatibility in case we ever need it
+            ;;
+        -*)
+            NE_WHEN_PRESENT="${1:1}"
+            ;;
+    esac
+
+    shift
+done
+
+# and now on to the actual command ...
+shift
+
 set +e
 "$@" >$OUT 2>$TRACE
 RESULT=$?
