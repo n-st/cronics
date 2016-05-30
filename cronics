@@ -15,9 +15,11 @@ TRACE=$TMP/cronic.trace
 #   error when X in stdout:                     cronic +X
 #   error when X not in stdout or stderr:       cronic +!X
 #   no error when X in stdout or stderr:        cronic -X
+#   no error when exit status != 0:             cronic --ignore-exit-status
 E_WHEN_PRESENT=""
 E_WHEN_NOT_PRESENT=""
 NE_WHEN_PRESENT=""
+NE_WHEN_NONZERO_EXIT=0
 while [ "$1" != "--" ]
 do
     case "$1" in
@@ -26,6 +28,9 @@ do
             ;;
         +*)
             E_WHEN_PRESENT="${1:1}"
+            ;;
+        --ignore-exit-status)
+            NE_WHEN_NONZERO_EXIT=1
             ;;
         -!*)
             # Forward compatibility in case we ever need it
@@ -56,7 +61,7 @@ fi
 
 HAS_ERROR=0
 PROBLEMS=""
-if [ $RESULT -ne 0 ]
+if [ $RESULT -ne 0 -a "$NE_WHEN_NONZERO_EXIT" -ne 1 ]
 then
     HAS_ERROR=1
     PROBLEMS="${PROBLEMS}- non-zero exit code"$'\n'
