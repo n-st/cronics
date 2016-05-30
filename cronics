@@ -54,11 +54,40 @@ else
     ERR=$TRACE
 fi
 
-if [ $RESULT -ne 0 -o -s "$ERR" ]
+HAS_ERROR=0
+PROBLEMS=""
+if [ $RESULT -ne 0 ]
+then
+    HAS_ERROR=1
+    PROBLEMS="${PROBLEMS}- non-zero exit code"$'\n'
+fi
+if [ -s "$ERR" ]
+then
+    if [ -z "$NE_WHEN_PRESENT" ] || ! grep -- "$NE_WHEN_PRESENT" "$OUT" "$ERR" > /dev/null
     then
-    echo "Cronic detected failure or error output for the command:"
+        HAS_ERROR=1
+        PROBLEMS="${PROBLEMS}- output to stderr"$'\n'
+    fi
+fi
+if [ -n "$E_WHEN_PRESENT" ] && grep -- "$E_WHEN_PRESENT" "$OUT" "$ERR" > /dev/null
+then
+    HAS_ERROR=1
+    PROBLEMS="${PROBLEMS}- stdout or stderr matches search string '$E_WHEN_PRESENT'"$'\n'
+fi
+if [ -n "$E_WHEN_NOT_PRESENT" ] && grep -v -- "$E_WHEN_NOT_PRESENT" "$OUT" "$ERR" > /dev/null
+then
+    HAS_ERROR=1
+    PROBLEMS="${PROBLEMS}- stdout or stderr does not match search string '$E_WHEN_NOT_PRESENT'"$'\n'
+fi
+
+if [ $HAS_ERROR -ne 0 ]
+then
+    echo "Cronic detected problems with the command:"
     echo "$@"
     echo
+    echo "PROBLEMS:"
+    echo "$PROBLEMS"
+    # $PROBLEMS contains a trailing newline, so we don't need to echo here
     echo "RESULT CODE: $RESULT"
     echo
     echo "ERROR OUTPUT:"
