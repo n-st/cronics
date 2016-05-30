@@ -82,12 +82,12 @@ fi
 if [ -n "$E_WHEN_PRESENT" ] && grep -- "$E_WHEN_PRESENT" "$OUT" "$ERR" > /dev/null
 then
     HAS_ERROR=1
-    PROBLEMS="${PROBLEMS}- stdout or stderr matches search string '$E_WHEN_PRESENT'"$'\n'
+    PROBLEMS="${PROBLEMS}- stdout or stderr contains search string '$E_WHEN_PRESENT'"$'\n'
 fi
 if [ -n "$E_WHEN_NOT_PRESENT" ] && grep -v -- "$E_WHEN_NOT_PRESENT" "$OUT" "$ERR" > /dev/null
 then
     HAS_ERROR=1
-    PROBLEMS="${PROBLEMS}- stdout or stderr does not match search string '$E_WHEN_NOT_PRESENT'"$'\n'
+    PROBLEMS="${PROBLEMS}- stdout and stderr do not contain search string '$E_WHEN_NOT_PRESENT'"$'\n'
 fi
 
 if [ $HAS_ERROR -ne 0 ]
