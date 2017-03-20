@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # CronicS -- extended cron job wrapper
 # (with _s_earch capability, hence the s)
