@@ -46,10 +46,18 @@ do
     esac
 
     shift
+
+    [ "$#" -lt 1 ] && break
 done
 
 # and now on to the actual command ...
 shift
+
+if [ "$#" -lt 1 ]
+then
+    echo 'No command given. Aborting.' 1>&2
+    exit 1
+fi
 
 set +e
 "$@" >$OUT 2>$TRACE
